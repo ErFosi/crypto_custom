@@ -139,6 +139,20 @@ func marshalPublicKey(pub any) (publicKeyBytes []byte, publicKeyAlgorithm pkix.A
 	case dilithium.Dilithium2PublicKey:
 		publicKeyBytes = pub.Value
 		publicKeyAlgorithm.Algorithm = oidPublicKeyDilithium2
+
+	case dilithium.Dilithium3PublicKey:
+		publicKeyBytes = pub.Value
+		publicKeyAlgorithm.Algorithm = oidPublicKeyDilithium3
+
+	case dilithium.Dilithium5PublicKey:
+		publicKeyBytes = pub.Value
+		publicKeyAlgorithm.Algorithm = oidPublicKeyDilithium5
+	case falcon.Falcon512PublicKey:
+		publicKeyBytes = pub.Value
+		publicKeyAlgorithm.Algorithm = oidPublicKeyFalcon512
+	case falcon.Falcon1024PublicKey:
+		publicKeyBytes = pub.Value
+		publicKeyAlgorithm.Algorithm = oidPublicKeyFalcon1024
 	default:
 		print(pub)
 		return nil, pkix.AlgorithmIdentifier{}, fmt.Errorf("x509: unsupported public key type: %T", pub)
@@ -1519,6 +1533,9 @@ func signingParamsForPublicKey(pub any, requestedSigAlgo SignatureAlgorithm) (ha
 	case *falcon.Falcon512PrivateKey:
 		pubType = Falcon512
 		sigAlgo.Algorithm = oidPublicKeyFalcon512
+	case *falcon.Falcon1024PrivateKey:
+		pubType = Falcon1024
+		sigAlgo.Algorithm = oidPublicKeyFalcon1024
 
 	default:
 		print(pub)
