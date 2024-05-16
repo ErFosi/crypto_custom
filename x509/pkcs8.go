@@ -169,7 +169,7 @@ func MarshalPKCS8PrivateKey(key any) ([]byte, error) {
 			}
 		}
 	case *dilithium.Dilithium2PrivateKey:
-		print(k.Secret.Ex)
+
 		privKey.Algo = pkix.AlgorithmIdentifier{
 			Algorithm: oidPublicKeyDilithium2,
 		}
