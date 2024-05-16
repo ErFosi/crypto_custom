@@ -1,4 +1,4 @@
-module github.com/erfosi/crypto_custom
+module crypto_custom
 
 go 1.22.0
 
