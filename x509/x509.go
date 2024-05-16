@@ -50,7 +50,7 @@ import (
 	_ "crypto/sha256"
 	_ "crypto/sha512"
 
-	"github.com/erfosi/crypto_custom/dilithium2"
+	"crypto_custom/dilithium2"
 
 	"golang.org/x/crypto/cryptobyte"
 	cryptobyte_asn1 "golang.org/x/crypto/cryptobyte/asn1"
