@@ -169,9 +169,11 @@ func MarshalPKCS8PrivateKey(key any) ([]byte, error) {
 			}
 		}
 	case *dilithium2.Dilithium2PrivateKey:
+		print(k.Secret.Ex)
 		privKey.Algo = pkix.AlgorithmIdentifier{
 			Algorithm: oidPublicKeyDilithium2,
 		}
+		privKey.PrivateKey = k.Secret.ExportSecretKey()
 
 	default:
 		return nil, fmt.Errorf("x509: unknown key type while marshaling PKCS#8: %T", key)
