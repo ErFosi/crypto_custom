@@ -14,7 +14,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/erfosi/crypto_custom/dilithium2"
+	"github.com/erfosi/crypto_custom/dilithium"
 )
 
 // pkcs8 reflects an ASN.1, PKCS #8 PrivateKey. See
@@ -168,7 +168,7 @@ func MarshalPKCS8PrivateKey(key any) ([]byte, error) {
 				return nil, errors.New("x509: failed to marshal EC private key while building PKCS#8: " + err.Error())
 			}
 		}
-	case *dilithium2.Dilithium2PrivateKey:
+	case *dilithium.Dilithium2PrivateKey:
 		print(k.Secret.Ex)
 		privKey.Algo = pkix.AlgorithmIdentifier{
 			Algorithm: oidPublicKeyDilithium2,

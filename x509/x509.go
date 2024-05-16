@@ -50,7 +50,8 @@ import (
 	_ "crypto/sha256"
 	_ "crypto/sha512"
 
-	"github.com/erfosi/crypto_custom/dilithium2"
+	"github.com/erfosi/crypto_custom/dilithium"
+	"github.com/erfosi/crypto_custom/falcon"
 
 	"golang.org/x/crypto/cryptobyte"
 	cryptobyte_asn1 "golang.org/x/crypto/cryptobyte/asn1"
@@ -135,7 +136,7 @@ func marshalPublicKey(pub any) (publicKeyBytes []byte, publicKeyAlgorithm pkix.A
 			}
 			publicKeyAlgorithm.Parameters.FullBytes = paramBytes
 		}
-	case dilithium2.Dilithium2PublicKey:
+	case dilithium.Dilithium2PublicKey:
 		publicKeyBytes = pub.Value
 		publicKeyAlgorithm.Algorithm = oidPublicKeyDilithium2
 	default:
@@ -267,6 +268,10 @@ const (
 	ECDSA
 	Ed25519
 	Dilithium2
+	Dilithium3
+	Dilithium5
+	Falcon512
+	Falcon1024
 )
 
 var publicKeyAlgoName = [...]string{
@@ -275,6 +280,10 @@ var publicKeyAlgoName = [...]string{
 	ECDSA:      "ECDSA",
 	Ed25519:    "Ed25519",
 	Dilithium2: "Dilithium2",
+	Dilithium3: "Dilithium3",
+	Dilithium5: "Dilithium5",
+	Falcon512:  "Falcon512",
+	Falcon1024: "Falcon1024",
 }
 
 func (algo PublicKeyAlgorithm) String() string {
@@ -362,6 +371,10 @@ var (
 	oidISOSignatureSHA1WithRSA = asn1.ObjectIdentifier{1, 3, 14, 3, 2, 29}
 
 	oidSignatureDilithium2 = asn1.ObjectIdentifier{1, 3, 6, 1, 4, 1, 2, 267, 7, 4, 4}
+	oidSignatureDilithium3 = asn1.ObjectIdentifier{1, 3, 6, 1, 4, 1, 2, 267, 7, 6, 5} // Nuevo OID Dilithium3
+	oidSignatureDilithium5 = asn1.ObjectIdentifier{1, 3, 6, 1, 4, 1, 2, 267, 7, 8, 7}
+	oidSignatureFalcon512  = asn1.ObjectIdentifier{1, 3, 9999, 3, 6} // Nuevo OID Falcon512
+	oidSignatureFalcon1024 = asn1.ObjectIdentifier{1, 3, 9999, 3, 9} // Nuevo OID Falcon1024
 )
 
 var signatureAlgorithmDetails = []struct {
@@ -495,6 +508,10 @@ var (
 	oidPublicKeyX25519     = asn1.ObjectIdentifier{1, 3, 101, 110}
 	oidPublicKeyEd25519    = asn1.ObjectIdentifier{1, 3, 101, 112}
 	oidPublicKeyDilithium2 = asn1.ObjectIdentifier{1, 3, 6, 1, 4, 1, 2, 267, 7, 4, 4} //NUEVO OID DE DILITHIUM2
+	oidPublicKeyDilithium3 = asn1.ObjectIdentifier{1, 3, 6, 1, 4, 1, 2, 267, 7, 6, 5} // Nuevo OID Dilithium3
+	oidPublicKeyDilithium5 = asn1.ObjectIdentifier{1, 3, 6, 1, 4, 1, 2, 267, 7, 8, 7} // Nuevo OID Dilithium3
+	oidPublicKeyFalcon512  = asn1.ObjectIdentifier{1, 3, 9999, 3, 6}                  //nuevo oid falcon512
+	oidPublicKeyFalcon1024 = asn1.ObjectIdentifier{1, 3, 9999, 3, 9}
 )
 
 // getPublicKeyAlgorithmFromOID returns the exposed PublicKeyAlgorithm
@@ -513,6 +530,16 @@ func getPublicKeyAlgorithmFromOID(oid asn1.ObjectIdentifier) PublicKeyAlgorithm 
 
 	case oid.Equal(oidPublicKeyDilithium2):
 		return Dilithium2
+
+	case oid.Equal(oidPublicKeyDilithium3):
+		return Dilithium3
+	case oid.Equal(oidPublicKeyDilithium5):
+		return Dilithium5
+	case oid.Equal(oidPublicKeyFalcon512):
+		return Falcon512
+	case oid.Equal(oidPublicKeyFalcon1024):
+		return Falcon1024
+
 	}
 	print(oid)
 	return UnknownPublicKeyAlgorithm
@@ -1480,9 +1507,18 @@ func signingParamsForPublicKey(pub any, requestedSigAlgo SignatureAlgorithm) (ha
 	case ed25519.PublicKey:
 		pubType = Ed25519
 		sigAlgo.Algorithm = oidSignatureEd25519
-	case *dilithium2.Dilithium2PrivateKey:
+	case *dilithium.Dilithium2PrivateKey:
 		pubType = Dilithium2
 		sigAlgo.Algorithm = oidPublicKeyDilithium2
+	case *dilithium.Dilithium3PrivateKey:
+		pubType = Dilithium3
+		sigAlgo.Algorithm = oidPublicKeyDilithium3
+	case *dilithium.Dilithium5PrivateKey:
+		pubType = Dilithium5
+		sigAlgo.Algorithm = oidPublicKeyDilithium5
+	case *falcon.Falcon512PrivateKey:
+		pubType = Falcon512
+		sigAlgo.Algorithm = oidPublicKeyFalcon512
 
 	default:
 		print(pub)
