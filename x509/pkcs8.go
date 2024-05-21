@@ -169,13 +169,28 @@ func MarshalPKCS8PrivateKey(key any) ([]byte, error) {
 				return nil, errors.New("x509: failed to marshal EC private key while building PKCS#8: " + err.Error())
 			}
 		}
-	case *dilithium.Dilithium2PrivateKey, *dilithium.Dilithium3PrivateKey, *dilithium.Dilithium5PrivateKey:
+	case *dilithium.Dilithium2PrivateKey:
+		privKey.Algo = pkix.AlgorithmIdentifier{
+			Algorithm: oidPublicKeyDilithium2,
+		}
+		privKey.PrivateKey = k.Secret.ExportSecretKey()
+	case *dilithium.Dilithium3PrivateKey:
+		privKey.Algo = pkix.AlgorithmIdentifier{
+			Algorithm: oidPublicKeyDilithium2,
+		}
+		privKey.PrivateKey = k.Secret.ExportSecretKey()
+	case *dilithium.Dilithium5PrivateKey:
 		privKey.Algo = pkix.AlgorithmIdentifier{
 			Algorithm: oidPublicKeyDilithium2,
 		}
 		privKey.PrivateKey = k.Secret.ExportSecretKey()
 
-	case *falcon.Falcon512PrivateKey, *falcon.Falcon1024PrivateKey:
+	case *falcon.Falcon512PrivateKey:
+		privKey.Algo = pkix.AlgorithmIdentifier{
+			Algorithm: oidPublicKeyDilithium2,
+		}
+		privKey.PrivateKey = k.Secret.ExportSecretKey()
+	case *falcon.Falcon1024PrivateKey:
 		privKey.Algo = pkix.AlgorithmIdentifier{
 			Algorithm: oidPublicKeyDilithium2,
 		}
