@@ -13,9 +13,9 @@ type Falcon512PublicKey struct {
 }
 
 type Falcon512PrivateKey struct {
-	Dilithium2PublicKey Falcon512PublicKey
-	Secret              oqs.Signature
-	publicKeyGenerated  bool
+	Falcon512PublicKey Falcon512PublicKey
+	Secret             oqs.Signature
+	publicKeyGenerated bool
 }
 
 func (priv Falcon512PrivateKey) Public() crypto.PublicKey {
@@ -32,10 +32,10 @@ func (priv Falcon512PrivateKey) Public() crypto.PublicKey {
 			return nil
 		}
 
-		priv.Dilithium2PublicKey.Value = publicKey
+		priv.Falcon512PublicKey.Value = publicKey
 		priv.publicKeyGenerated = true
 	}
-	return priv.Dilithium2PublicKey
+	return priv.Falcon512PublicKey
 }
 
 func GenerateFalcon512KeyPair() *Falcon512PrivateKey {
@@ -45,7 +45,7 @@ func GenerateFalcon512KeyPair() *Falcon512PrivateKey {
 	key := Falcon512PrivateKey{}
 
 	publicKey, _ := sig.GenerateKeyPair()
-	key.Dilithium2PublicKey.Value = publicKey
+	key.Falcon512PublicKey.Value = publicKey
 	key.Secret = sig
 	key.publicKeyGenerated = true
 
@@ -67,7 +67,7 @@ type Falcon1024PublicKey struct {
 }
 
 type Falcon1024PrivateKey struct {
-	Dilithium2PublicKey Falcon512PublicKey
+	Falcon1024PublicKey Falcon512PublicKey
 	Secret              oqs.Signature
 	publicKeyGenerated  bool
 }
@@ -86,20 +86,20 @@ func (priv Falcon1024PrivateKey) Public() crypto.PublicKey {
 			return nil
 		}
 
-		priv.Dilithium2PublicKey.Value = publicKey
+		priv.Falcon1024PublicKey.Value = publicKey
 		priv.publicKeyGenerated = true
 	}
-	return priv.Dilithium2PublicKey
+	return priv.Falcon1024PublicKey
 }
 
-func GenerateDilithium2KeyPair() *Falcon1024PrivateKey {
+func GenerateFalcon1024KeyPair() *Falcon1024PrivateKey {
 	sig := oqs.Signature{}
 	sig.Init("Falcon1024", nil)
 
 	key := Falcon1024PrivateKey{}
 
 	publicKey, _ := sig.GenerateKeyPair()
-	key.Dilithium2PublicKey.Value = publicKey
+	key.Falcon1024PublicKey.Value = publicKey
 	key.Secret = sig
 	key.publicKeyGenerated = true
 
