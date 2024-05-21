@@ -21,7 +21,7 @@ type Falcon512PrivateKey struct {
 func (priv Falcon512PrivateKey) Public() crypto.PublicKey {
 	if !priv.publicKeyGenerated {
 		sig := oqs.Signature{}
-		if err := sig.Init("Falcon512", nil); err != nil {
+		if err := sig.Init("Falcon-512", nil); err != nil {
 			return nil
 		}
 		publicKey, err := sig.GenerateKeyPair()
@@ -40,7 +40,7 @@ func (priv Falcon512PrivateKey) Public() crypto.PublicKey {
 
 func GenerateFalcon512KeyPair() *Falcon512PrivateKey {
 	sig := oqs.Signature{}
-	sig.Init("Falcon512", nil)
+	sig.Init("Falcon-512", nil)
 
 	key := Falcon512PrivateKey{}
 
@@ -75,7 +75,7 @@ type Falcon1024PrivateKey struct {
 func (priv Falcon1024PrivateKey) Public() crypto.PublicKey {
 	if !priv.publicKeyGenerated {
 		sig := oqs.Signature{}
-		if err := sig.Init("Falcon1024", nil); err != nil {
+		if err := sig.Init("Falcon-1024", nil); err != nil {
 			return nil
 		}
 		publicKey, err := sig.GenerateKeyPair()
@@ -94,7 +94,7 @@ func (priv Falcon1024PrivateKey) Public() crypto.PublicKey {
 
 func GenerateFalcon1024KeyPair() *Falcon1024PrivateKey {
 	sig := oqs.Signature{}
-	sig.Init("Falcon1024", nil)
+	sig.Init("Falcon-1024", nil)
 
 	key := Falcon1024PrivateKey{}
 
