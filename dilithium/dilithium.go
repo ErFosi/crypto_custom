@@ -60,6 +60,19 @@ func (priv Dilithium2PrivateKey) Sign(_ io.Reader, digest []byte, _ crypto.Signe
 	}
 	return signature, nil
 }
+func (pub Dilithium2PublicKey) Verify(message []byte, signature []byte) (bool, error) {
+	sig := oqs.Signature{}
+	if err := sig.Init("Dilithium2", nil); err != nil {
+		return false, err
+	}
+	defer sig.Clean()
+
+	valid, err := sig.Verify(message, signature, pub.Value)
+	if err != nil {
+		return false, err
+	}
+	return valid, nil
+}
 
 // DILITHIUM3
 type Dilithium3PublicKey struct {
@@ -115,6 +128,20 @@ func (priv Dilithium3PrivateKey) Sign(_ io.Reader, digest []byte, _ crypto.Signe
 	return signature, nil
 }
 
+func (pub Dilithium3PublicKey) Verify(message []byte, signature []byte) (bool, error) {
+	sig := oqs.Signature{}
+	if err := sig.Init("Dilithium3", nil); err != nil {
+		return false, err
+	}
+	defer sig.Clean()
+
+	valid, err := sig.Verify(message, signature, pub.Value)
+	if err != nil {
+		return false, err
+	}
+	return valid, nil
+}
+
 // DILITHIUM5
 type Dilithium5PublicKey struct {
 	Value []byte
@@ -167,4 +194,18 @@ func (priv Dilithium5PrivateKey) Sign(_ io.Reader, digest []byte, _ crypto.Signe
 		return nil, err
 	}
 	return signature, nil
+}
+
+func (pub Dilithium5PublicKey) Verify(message []byte, signature []byte) (bool, error) {
+	sig := oqs.Signature{}
+	if err := sig.Init("Dilithium5", nil); err != nil {
+		return false, err
+	}
+	defer sig.Clean()
+
+	valid, err := sig.Verify(message, signature, pub.Value)
+	if err != nil {
+		return false, err
+	}
+	return valid, nil
 }

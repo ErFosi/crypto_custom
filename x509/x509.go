@@ -1003,7 +1003,54 @@ func checkSignature(algo SignatureAlgorithm, signed, signature []byte, publicKey
 			return errors.New("x509: Ed25519 verification failure")
 		}
 		return
+
+	case dilithium.Dilithium2PublicKey:
+		if pubKeyAlgo != Dilithium2 {
+			return signaturePublicKeyAlgoMismatchError(pubKeyAlgo, pub)
+		}
+		valid, err := pub.Verify(signed, signature)
+		if !valid || err != nil {
+			return errors.New("x509: Dilithium2 verification failure")
+		}
+		return nil
+	case dilithium.Dilithium3PublicKey:
+		if pubKeyAlgo != Dilithium3 {
+			return signaturePublicKeyAlgoMismatchError(pubKeyAlgo, pub)
+		}
+		valid, err := pub.Verify(signed, signature)
+		if !valid || err != nil {
+			return errors.New("x509: Dilithium3 verification failure")
+		}
+		return nil
+	case dilithium.Dilithium5PublicKey:
+		if pubKeyAlgo != Dilithium5 {
+			return signaturePublicKeyAlgoMismatchError(pubKeyAlgo, pub)
+		}
+		valid, err := pub.Verify(signed, signature)
+		if !valid || err != nil {
+			return errors.New("x509: Dilithium5 verification failure")
+		}
+		return nil
+	case falcon.Falcon512PublicKey:
+		if pubKeyAlgo != Falcon512 {
+			return signaturePublicKeyAlgoMismatchError(pubKeyAlgo, pub)
+		}
+		valid, err := pub.Verify(signed, signature)
+		if !valid || err != nil {
+			return errors.New("x509: Falcon512 verification failure")
+		}
+		return nil
+	case falcon.Falcon1024PublicKey:
+		if pubKeyAlgo != Falcon1024 {
+			return signaturePublicKeyAlgoMismatchError(pubKeyAlgo, pub)
+		}
+		valid, err := pub.Verify(signed, signature)
+		if !valid || err != nil {
+			return errors.New("x509: Falcon1024 verification failure")
+		}
+		return nil
 	}
+
 	return ErrUnsupportedAlgorithm
 }
 

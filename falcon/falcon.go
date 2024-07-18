@@ -61,7 +61,21 @@ func (priv Falcon512PrivateKey) Sign(_ io.Reader, digest []byte, _ crypto.Signer
 	return signature, nil
 }
 
-// Falcon 512
+func (pub Falcon512PublicKey) Verify(message []byte, signature []byte) (bool, error) {
+	sig := oqs.Signature{}
+	if err := sig.Init("Falcon-512", nil); err != nil {
+		return false, err
+	}
+	defer sig.Clean()
+
+	valid, err := sig.Verify(message, signature, pub.Value)
+	if err != nil {
+		return false, err
+	}
+	return valid, nil
+}
+
+// Falcon 1024
 type Falcon1024PublicKey struct {
 	Value []byte
 }
@@ -113,4 +127,18 @@ func (priv Falcon1024PrivateKey) Sign(_ io.Reader, digest []byte, _ crypto.Signe
 		return nil, err
 	}
 	return signature, nil
+}
+
+func (pub Falcon1024PublicKey) Verify(message []byte, signature []byte) (bool, error) {
+	sig := oqs.Signature{}
+	if err := sig.Init("Falcon-1024", nil); err != nil {
+		return false, err
+	}
+	defer sig.Clean()
+
+	valid, err := sig.Verify(message, signature, pub.Value)
+	if err != nil {
+		return false, err
+	}
+	return valid, nil
 }
